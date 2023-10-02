@@ -8,8 +8,7 @@ create schema "public";
 
 CREATE TABLE "public"."Users" (
 	"userId" serial NOT NULL,
-	"firstName" TEXT NOT NULL,
-	"lastName" TEXT NOT NULL,
+	"fullName" TEXT NOT NULL,
 	"email" TEXT NOT NULL,
   "username" TEXT NOT NULL,
 	"createdAt" timestamptz NOT NULL default now(),

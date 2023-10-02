@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars  -- Remove when used */
 import 'dotenv/config';
 import express from 'express';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 import pg from 'pg';
 import { ClientError, errorMiddleware } from './lib/index.js';
 
@@ -28,6 +30,62 @@ app.use(express.json());
 
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello, World!' });
+});
+
+// Endpoint to get all users of the database.
+app.get('/api/tables/public.Users', async (req, res, next) => {
+  try {
+    const sql = `select "firstName", "lastName", "username", "email"
+    from "Users"
+    order by "userId"`;
+    const result = await db.query(sql);
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Endpoint to allow user to sign-up
+app.post('/api/auth/sign-up', async (req, res, next) => {
+  try {
+    const { fullName, email, username, password } = req.body;
+    if (!username || !password) {
+      throw new ClientError(400, 'username and password are required fields');
+    }
+    const hashedPassword = await argon2.hash(password);
+    const sql = `insert into "Users" ("fullName", "email", "username", "hashedPassword")
+    values ($1, $2, $3, $4)
+    returning *`;
+    const params = [fullName, email, username, hashedPassword];
+    const result = await db.query(sql, params);
+    const [user] = result.rows;
+    res.status(201).json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Endpoint to authorize user login
+app.post('/api/auth/sign-in', async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) throw new ClientError(401, 'Invalid login');
+    const sql = `SELECT "userId", "hashedPassword"
+      from "Users"
+      where "username" = $1`;
+    const params = [username];
+    const result = await db.query(sql, params);
+    const [user] = result.rows;
+    if (!user) throw new ClientError(401, 'Invalid login');
+    const { userId, hashedPassword } = user;
+    if (!(await argon2.verify(hashedPassword, password)))
+      throw new ClientError(401, 'Invalid login');
+    const payload = { userId, username };
+    const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+    res.json({ token, user: payload });
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**
