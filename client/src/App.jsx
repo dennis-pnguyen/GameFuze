@@ -1,30 +1,56 @@
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
-// import RegistrationForm from './components/RegistrationForm';
-// import { Routes, Route } from 'react-router-dom';
+import RegistrationForm from './pages/RegistrationForm';
+import { Routes, Route } from 'react-router-dom';
+import AppContext from './components/AppContext';
 import './App.css';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const tokenKey = 'react-context-jwt';
+
 export default function App() {
-  // const [serverData, setServerData] = useState('');
+  const [user, setUser] = useState();
+  const [token, setToken] = useState();
+  const [isAuthorizing, setIsAuthorizing] = useState(true);
 
-  // useEffect(() => {
-  //   async function readServerData() {
-  //     const resp = await fetch('/api/hello');
-  //     const data = await resp.json();
+  // If user is logged in previously on this broswer, authorize them
+  useEffect(() => {
+    const auth = localStorage.getItem(tokenKey);
+    if (auth) {
+      const a = JSON.parse(auth);
+      setUser(a.user);
+      setToken(a.token);
+    }
+    setIsAuthorizing(false);
+  }, []);
 
-  //     console.log('Data from server:', data);
+  if (isAuthorizing) return null;
 
-  //     setServerData(data.message);
-  //   }
+  function handleSignIn(auth) {
+    localStorage.setItem(tokenKey, JSON.stringify(auth));
+    setUser(auth.user);
+    setToken(auth.token);
+  }
 
-  //   readServerData();
-  // }, []);
+  function handleSignOut() {
+    localStorage.removeItem(tokenKey);
+    setUser(undefined);
+    setToken(undefined);
+  }
+
+  const contextValue = { user, token, handleSignIn, handleSignOut };
 
   return (
-    <>
-      <Header />
-    </>
+    <AppContext.Provider value={contextValue}>
+      <Routes>
+        <Route path="/" element={<Header />}>
+          <Route
+            path="/register"
+            element={<RegistrationForm action="sign-up" />}
+          />
+          <Route path="*" />
+        </Route>
+      </Routes>
+    </AppContext.Provider>
   );
 }

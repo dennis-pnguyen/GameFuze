@@ -46,7 +46,7 @@ app.get('/api/tables/public.Users', async (req, res, next) => {
 });
 
 // Endpoint to allow user to sign-up
-app.post('/api/auth/sign-up', async (req, res, next) => {
+app.post('/api/sign-up', async (req, res, next) => {
   try {
     const { fullName, email, username, password } = req.body;
     if (!username || !password) {
@@ -66,7 +66,7 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
 });
 
 // Endpoint to authorize user login
-app.post('/api/auth/sign-in', async (req, res, next) => {
+app.post('/api/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) throw new ClientError(401, 'Invalid login');
