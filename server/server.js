@@ -87,7 +87,52 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     next(err);
   }
 });
+// Endpoint for user to create a review on a game
+app.post('/api/tables/public.Reviews', async (req, res, next) => {
+  try {
+    if (!req.user) throw new ClientError(401, 'Not logged in');
+    const { title, notes } = req.body;
+    if (!title || !notes)
+      throw new ClientError(400, 'Title and notes are required fields');
+    const sql = `INSERT into "Reviews" ("userId", "title", "notes")
+      values ($1, $2, $3)
+      returning *`;
+    const params = [req.user.userId, title, notes];
+    const result = await db.query(sql, params);
+    const [entry] = result.rows;
+    res.status(201).json(entry);
+  } catch (err) {
+    next(err);
+  }
+});
 
+// Endpoint to get a user's reviews
+app.get('/api/tables/public.Reviews', async (req, res, next) => {
+  try {
+    if (!req.user) throw new ClientError(401, 'not logged in');
+    const sql = ` select * from "Reviews"
+      where "userId" = $1
+      order by "reviewId" desc`;
+    const result = await db.query(sql, [req.user.userId]);
+    res.status(201).json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Endpoint to retrieve a user's wishlist
+app.get('/api/tables/public.Wishlist', async (req, res, next) => {
+  try {
+    if (!req.user) throw new ClientError(401, 'not logged in');
+    const sql = ` select * from "Wishlist"
+      where "userId" = $1
+      order by "gameId" desc`;
+    const result = await db.query(sql, [req.user.userId]);
+    res.status(201).json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
 /**
  * Serves React's index.html if no api route matches.
  *
