@@ -1,45 +1,31 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { signIn, signUp } from '../lib';
 
-export default function RegistrationForm({ action, onSignIn }) {
-  const navigate = useNavigate();
-  const [error, setError] = useState();
+export default function RegistrationForm() {
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event) {
-    async function handleSignUp(username, password) {
-      await signUp(username, password);
-      navigate('/sign-in');
-    }
-    async function handleSignIn(username, password) {
-      const auth = await signIn(username, password);
-      if (auth.user && auth.token) {
-        onSignIn(auth);
-      }
-    }
     event.preventDefault();
-    if (event.currentTarget === null) throw new Error();
-    const formData = new FormData(event.currentTarget);
-    const entries = Object.fromEntries(formData.entries());
-    const username = entries.username;
-    const password = entries.password;
     try {
-      if (action === 'sign-up') {
-        handleSignUp(username, password);
-      } else {
-        handleSignIn(username, password);
-      }
+      setIsLoading(true);
+      const formData = new FormData(event.currentTarget);
+      const userData = Object.fromEntries(formData.entries());
+      const req = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      };
+      const res = await fetch('/api/sign-up', req);
+      if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+      const user = await res.json;
+      alert(`Registered!`, user);
     } catch (err) {
-      setError(err);
+      alert(`Error registering user: ${err}`);
+    } finally {
+      setIsLoading(false);
     }
   }
-
-  const alternateActionTo = action === 'sign-up' ? '/sign-in' : '/sign-up';
-  const alternateText =
-    action === 'sign-up' ? 'Sign in instead' : 'Register now';
-  const submitButtonText = action === 'sign-up' ? 'Register' : 'Log In';
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -93,24 +79,10 @@ export default function RegistrationForm({ action, onSignIn }) {
         />
       </Form.Group>
       <div>
-        <small>
-          <Link className="text-muted" to={alternateActionTo}>
-            {alternateText}
-          </Link>
-        </small>
-      </div>
-      <div>
-        <Button variant="primary" type="submit">
-          {submitButtonText}
+        <Button disabled={isLoading} variant="primary" type="submit">
+          Register
         </Button>
       </div>
-      <>
-        {error && (
-          <div style={{ color: 'red' }}>
-            Error: {error instanceof Error ? error.message : 'Unknown Error'}
-          </div>
-        )}
-      </>
     </Form>
   );
 }

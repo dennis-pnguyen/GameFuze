@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Header from './components/Header';
-import RegistrationForm from './pages/RegistrationForm';
+import RegistrationForm from './components/RegistrationForm';
+import Home from './pages/HomePage';
+import NotFound from './pages/NotFound';
 import { Routes, Route } from 'react-router-dom';
 import AppContext from './components/AppContext';
 import './App.css';
@@ -44,11 +46,12 @@ export default function App() {
     <AppContext.Provider value={contextValue}>
       <Routes>
         <Route path="/" element={<Header />}>
+          <Route path="/home" element={<Home />} />
           <Route
             path="/register"
             element={<RegistrationForm action="sign-up" />}
           />
-          <Route path="*" />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </AppContext.Provider>
