@@ -15,7 +15,7 @@ export default function App() {
   const [token, setToken] = useState();
   const [isAuthorizing, setIsAuthorizing] = useState(true);
 
-  // If user is logged in previously on this broswer, authorize them
+  // If user is logged in previously on this browser, authorize them
   useEffect(() => {
     const auth = localStorage.getItem(tokenKey);
     if (auth) {

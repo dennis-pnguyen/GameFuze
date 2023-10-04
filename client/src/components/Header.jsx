@@ -16,7 +16,7 @@ export default function Header() {
         className="bg-body-tertiary"
         data-bs-theme="light">
         <Container>
-          <Navbar.Brand href="/">gameHub</Navbar.Brand>
+          <Navbar.Brand href="/">GameFuze</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
