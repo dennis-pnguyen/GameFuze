@@ -19,7 +19,7 @@ export default function AuthPage({ action }) {
     <div className="row pt-5">
       <div className="col-12 offset-0 col-sm-10">
         <header className="text-center">
-          <h2 mb-2>gameHub</h2>
+          <h2 mb-2>GameFuze</h2>
           <p className="text-muted mb-4">{welcomeMessage}</p>
         </header>
         <div className="card p-3">

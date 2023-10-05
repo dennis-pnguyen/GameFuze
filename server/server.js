@@ -87,6 +87,7 @@ app.post('/api/sign-in', async (req, res, next) => {
     next(err);
   }
 });
+
 // Endpoint for user to create a review on a game
 app.post('/api/tables/public.Reviews', async (req, res, next) => {
   try {
@@ -133,6 +134,7 @@ app.get('/api/tables/public.Wishlist', async (req, res, next) => {
     next(err);
   }
 });
+
 /**
  * Serves React's index.html if no api route matches.
  *

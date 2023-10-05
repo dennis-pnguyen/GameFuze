@@ -7,7 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-export default function Header() {
+export default function NavBar() {
   return (
     <>
       <Navbar
@@ -16,7 +16,7 @@ export default function Header() {
         className="bg-body-tertiary"
         data-bs-theme="light">
         <Container>
-          <Navbar.Brand href="/">gameHub</Navbar.Brand>
+          <Navbar.Brand href="/">GameFuze</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">

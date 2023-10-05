@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import Header from './components/Header';
+import NavBar from './components/NavBar';
 import RegistrationForm from './components/RegistrationForm';
 import Home from './pages/HomePage';
+import Reviews from './pages/ReviewsPage';
+import Wishlist from './pages/Wishlist';
 import NotFound from './pages/NotFound';
 import { Routes, Route } from 'react-router-dom';
 import AppContext from './components/AppContext';
@@ -15,7 +17,7 @@ export default function App() {
   const [token, setToken] = useState();
   const [isAuthorizing, setIsAuthorizing] = useState(true);
 
-  // If user is logged in previously on this broswer, authorize them
+  // If user is logged in previously on this browser, authorize them
   useEffect(() => {
     const auth = localStorage.getItem(tokenKey);
     if (auth) {
@@ -45,12 +47,15 @@ export default function App() {
   return (
     <AppContext.Provider value={contextValue}>
       <Routes>
-        <Route path="/" element={<Header />}>
+        <Route path="/" element={<NavBar />}>
           <Route path="/home" element={<Home />} />
           <Route
             path="/register"
             element={<RegistrationForm action="sign-up" />}
           />
+          <Route path="/login" />
+          <Route path="/reviews" element={<Reviews />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
