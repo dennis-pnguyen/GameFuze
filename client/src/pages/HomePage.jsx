@@ -3,12 +3,15 @@
 // Import bootstrap card component
 import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
+import { useNavigate } from 'react-router-dom';
+// import GameDetails from './GameDetails';
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [games, setGames] = useState([]);
   const [error, setError] = useState();
+  const navigate = useNavigate();
 
   // useEffect to fetch game data from API
   useEffect(() => {
@@ -48,15 +51,20 @@ export default function Home() {
     return <div>Error! {error.message}</div>;
   }
 
+  function handleClick() {
+    navigate('/game-details');
+    console.log('this card was clicked!', event.currentTarget);
+  }
+
   return (
     <>
-      <div>
+      {/* <div>
         <h2 style={{ margin: '3rem' }}>Home</h2>
-      </div>
+      </div> */}
       <div className="container">
         <div className="row" id="card-container">
           {games.map((game) => (
-            <div className="col-md-4">
+            <div gamekey={game.id} className="col-md-4">
               <Card key={game.id} style={{ width: '18rem' }}>
                 <Card.Img
                   src={game.background_image}
@@ -66,6 +74,7 @@ export default function Home() {
                 <Card.Body>
                   <Card.Title>{game.name}</Card.Title>
                   <Card.Text>{('Release date:', game.released)}</Card.Text>
+                  <Card.Link onClick={handleClick}>Details</Card.Link>
                 </Card.Body>
               </Card>
             </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import RegistrationForm from './components/RegistrationForm';
 import Home from './pages/HomePage';
+import GameDetails from './pages/GameDetails';
 import Reviews from './pages/ReviewsPage';
 import Wishlist from './pages/Wishlist';
 import NotFound from './pages/NotFound';
@@ -53,6 +54,7 @@ export default function App() {
             path="/register"
             element={<RegistrationForm action="sign-up" />}
           />
+          <Route path="/game-details" element={<GameDetails />} />
           <Route path="/login" />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/wishlist" element={<Wishlist />} />

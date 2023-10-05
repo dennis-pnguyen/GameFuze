@@ -4,13 +4,13 @@ const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function GameDetails() {
   const params = useParams();
-  const gameId = params.gameDetails.id;
+  const gameId = params.id;
   const [gameDetails, setGameDetails] = useState([]);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchGameDetails() {
+    async function fetchGameDetails(gameId) {
       try {
         const req = {
           method: 'GET',
@@ -50,19 +50,14 @@ export default function GameDetails() {
   return (
     <div className="container-fluid">
       <div>
-        <p className="h1">Name of Game</p>
+        <p className="h1">{gameDetails.name}</p>
       </div>
       <div>
         <img className="image" />
       </div>
       <div className="col-12 col-sm-6 col-md-7">
         <p className="h5">About</p>
-        <p classnName="text-secondary">Game description goes here</p>
-      </div>
-      <div className="row">
-        <div className="col">
-          <p className="h3">Long description goes here</p>
-        </div>
+        <p className="text-secondary">{gameDetails.description}</p>
       </div>
     </div>
   );
