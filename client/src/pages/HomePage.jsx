@@ -3,8 +3,6 @@
 // Import bootstrap card component
 import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
-// import Button from 'react-bootstrap/Button';
-
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function Home() {
@@ -58,8 +56,8 @@ export default function Home() {
       <div className="container">
         <div className="row" id="card-container">
           {games.map((game) => (
-            <div className="col-md-4" key={game.id}>
-              <Card style={{ width: '18rem' }}>
+            <div className="col-md-4">
+              <Card key={game.id} style={{ width: '18rem' }}>
                 <Card.Img
                   src={game.background_image}
                   variant="top"
@@ -67,7 +65,7 @@ export default function Home() {
                 />
                 <Card.Body>
                   <Card.Title>{game.name}</Card.Title>
-                  <Card.Text>{(`Release date:`, game.released)}</Card.Text>
+                  <Card.Text>{('Release date:', game.released)}</Card.Text>
                 </Card.Body>
               </Card>
             </div>
