@@ -3,16 +3,16 @@
 // Import bootstrap card component
 import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import image from '../images/cyberpunk-cover-art.jpeg';
+// import Button from 'react-bootstrap/Button';
 
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  // const [data, setData] = useState([]);
+  const [games, setGames] = useState([]);
   const [error, setError] = useState();
 
+  // useEffect to fetch game data from API
   useEffect(() => {
     async function fetchGameData() {
       try {
@@ -30,7 +30,8 @@ export default function Home() {
             `'Network response was NOT okay:', ${response.status}`
           );
         const gameData = await response.json();
-        console.log(gameData);
+        setGames(gameData.results);
+        console.log(gameData.results);
       } catch (error) {
         console.error(error.message);
         setError(error);
@@ -41,18 +42,6 @@ export default function Home() {
     fetchGameData();
   }, []);
 
-  // const gameList = data.map((game) => (
-  //   <li key={game.id}>
-  //     <Card style={{ width: '18rem' }}>
-  //       <Card.Img variant="top" src={game.results.background_image} />
-  //       <Card.Body>
-  //         <Card.Title>{game.results.name}</Card.Title>
-  //         <Card.Text>{game.results.released}</Card.Text>
-  //       </Card.Body>
-  //     </Card>
-  //   </li>
-  // ));
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -60,20 +49,31 @@ export default function Home() {
     console.error('Fetch error:', error);
     return <div>Error! {error.message}</div>;
   }
+
   return (
     <>
-      <ul>
-        <li key="test">
-          <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src={image} />
-            <Card.Body>
-              <Card.Title>Cyberpunk 2077</Card.Title>
-              <Card.Text>12-10-2020</Card.Text>
-              <Button variant="primary">Go to game</Button>
-            </Card.Body>
-          </Card>
-        </li>
-      </ul>
+      <div>
+        <h2 style={{ margin: '3rem' }}>Home</h2>
+      </div>
+      <div className="container">
+        <div className="row" id="card-container">
+          {games.map((game) => (
+            <div className="col-md-4" key={game.id}>
+              <Card style={{ width: '18rem' }}>
+                <Card.Img
+                  src={game.background_image}
+                  variant="top"
+                  alt={game.name}
+                />
+                <Card.Body>
+                  <Card.Title>{game.name}</Card.Title>
+                  <Card.Text>{(`Release date:`, game.released)}</Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 }
