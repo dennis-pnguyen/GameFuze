@@ -54,7 +54,7 @@ export default function App() {
             path="/register"
             element={<RegistrationForm action="sign-up" />}
           />
-          <Route path="/game-details" element={<GameDetails />} />
+          <Route path="/game-details/:gameId" element={<GameDetails />} />
           <Route path="/login" />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/wishlist" element={<Wishlist />} />

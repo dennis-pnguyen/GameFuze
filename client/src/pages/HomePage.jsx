@@ -51,33 +51,42 @@ export default function Home() {
     return <div>Error! {error.message}</div>;
   }
 
-  function handleClick() {
-    navigate('/game-details');
-    console.log('this card was clicked!', event.currentTarget);
+  // handleDetailsClick for gameDetails to grab 'data-gamekey' id
+  function handleDetailsClick(gameId) {
+    navigate(`/game-details/${gameId}`);
+    console.log(`Game with id ${gameId} was clicked.`);
   }
 
   return (
     <>
-      {/* <div>
+      <div>
         <h2 style={{ margin: '3rem' }}>Home</h2>
-      </div> */}
+      </div>
       <div className="container">
-        <div className="row" id="card-container">
+        <div
+          style={{ justifyContent: 'space-evenly' }}
+          className="row"
+          id="card-container">
           {games.map((game) => (
-            <div gamekey={game.id} className="col-md-4">
-              <Card key={game.id} style={{ width: '18rem' }}>
-                <Card.Img
-                  src={game.background_image}
-                  variant="top"
-                  alt={game.name}
-                />
-                <Card.Body>
-                  <Card.Title>{game.name}</Card.Title>
-                  <Card.Text>{('Release date:', game.released)}</Card.Text>
-                  <Card.Link onClick={handleClick}>Details</Card.Link>
-                </Card.Body>
-              </Card>
-            </div>
+            <Card
+              className="shadow-sm"
+              key={game.id}
+              style={{ width: '18rem' }}>
+              <Card.Img
+                src={game.background_image}
+                variant="top"
+                alt={game.name}
+              />
+              <Card.Body>
+                <Card.Title>{game.name}</Card.Title>
+                <Card.Text>{('Release date:', game.released)}</Card.Text>
+                <Card.Link
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleDetailsClick(game.id)}>
+                  Details
+                </Card.Link>
+              </Card.Body>
+            </Card>
           ))}
         </div>
       </div>

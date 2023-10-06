@@ -1,6 +1,6 @@
 // import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import Header from './Header';
+// import Header from './Header';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -43,7 +43,6 @@ export default function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Header />
       <Outlet />
     </>
   );
