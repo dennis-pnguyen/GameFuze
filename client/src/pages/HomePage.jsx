@@ -1,10 +1,7 @@
-// Fetch from API and display cards of the games we received
-// Work to get pagination on this home page and display only a set amount
-// Import bootstrap card component
 import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from 'react-router-dom';
-// import GameDetails from './GameDetails';
+import Pagination from '../components/Pagination';
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function Home() {
@@ -18,7 +15,7 @@ export default function Home() {
     async function fetchGameData() {
       try {
         const response = await fetch(
-          `https://api.rawg.io/api/games?token&key=${apiKey}`,
+          `https://api.rawg.io/api/games?token&key=${apiKey}&page_size=40`,
           {
             method: 'GET',
             headers: {
@@ -79,7 +76,9 @@ export default function Home() {
               />
               <Card.Body>
                 <Card.Title>{game.name}</Card.Title>
-                <Card.Text>{('Release date:', game.released)}</Card.Text>
+                <Card.Text>
+                  Release date: {new Date(game.released).toLocaleDateString()}
+                </Card.Text>
                 <Card.Link
                   style={{ cursor: 'pointer' }}
                   onClick={() => handleDetailsClick(game.id)}>
@@ -89,6 +88,7 @@ export default function Home() {
             </Card>
           ))}
         </div>
+        <Pagination />
       </div>
     </>
   );

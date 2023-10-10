@@ -135,6 +135,25 @@ app.get('/api/tables/public.Wishlist', async (req, res, next) => {
   }
 });
 
+// Endpoint for adding to wishlist
+app.post('/api/tables/public.Wishlist', async (req, res, next) => {
+  try {
+    const { gameId, gameName } = req.body;
+    if (!gameId || !gameName)
+      throw new ClientError(400, 'Please select another game.');
+    const sql = `
+    insert into "Wishlist" ("gameId", "gameName")
+    values ($1, $2)
+    returning *`;
+    const params = [gameId, gameName];
+    const result = await db.query(sql, params);
+    const [game] = result.rows;
+    res.status(201).json(game);
+  } catch (err) {
+    next(err);
+  }
+});
+
 /**
  * Serves React's index.html if no api route matches.
  *

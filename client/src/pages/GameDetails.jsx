@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import Image from '../images/cyberpunk-cover-art.jpeg';
 import Button from 'react-bootstrap/Button';
 import { useParams } from 'react-router-dom';
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function GameDetails() {
   const { gameId } = useParams();
-  console.log('gameDetails,', gameId);
   const [gameDetails, setGameDetails] = useState([]);
+  // const [wishlist, setWishlist] = useState([]);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  // const navigate = useNavigate();
 
   // API call to get gameDetails of specific game
   useEffect(() => {
@@ -40,55 +40,87 @@ export default function GameDetails() {
   }, [error, gameId]);
 
   if (isLoading) return <div>Loading...</div>;
-  // if (error)
-  //   return (
-  //     <div>
-  //       Error Loading Game Details {gameId}:{''}
-  //       {error instanceof Error ? error.message : 'Unknown Error'}
-  //     </div>
-  //   );
+  if (error)
+    return (
+      <div>
+        Error Loading Game Details {gameId}:{''}
+        {error instanceof Error ? error.message : 'Unknown Error'}
+      </div>
+    );
 
   if (!gameDetails) return null;
 
+  // function handleWishlistClick() {
+  //   navigate('/wishlist');
+  //   console.log('currentTarget info:', event.currentTarget);
+  // }
+
+  async function addToWishlist(game) {
+    try {
+      const response = await fetch('/api/tables/public.Wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(game),
+      });
+      if (!response.ok)
+        throw new Error(`Network response was NOT okay: ${response.status}`);
+      const wishlistGame = await response.json();
+      console.log('gameDetails:', wishlistGame);
+    } catch (error) {
+      console.error(error.message);
+      setError(error);
+    }
+  }
+
   return (
     <div style={{ marginTop: '5rem' }} className="container-xl">
-      <div className="row">
-        <div className="col-md-6">
-          <p className="h1">{gameDetails.name}</p>
-          <div>
-            <img
-              style={{
-                objectFit: 'contain',
-                height: '500px',
-                width: '500px',
-              }}
-              className="image"
-              fluid="true"
-              src={Image}
-            />
-          </div>
-
-          <div>
-            <Button variant="success">Add to Wishlist</Button>
-            <Button variant="primary">Write a Review</Button>
-          </div>
-          <div className="col">
-            <p className="h4">About</p>
-            <p className="text-secondary">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Senectus et netus et malesuada fames ac turpis egestas. Rutrum
-              quisque non tellus orci ac auctor augue mauris augue. Mauris a
-              diam maecenas sed enim. Hac habitasse platea dictumst vestibulum.
-              Enim facilisis gravida neque convallis a cras. Laoreet sit amet
-              cursus sit amet dictum sit amet. Mattis nunc sed blandit libero
-              volutpat sed cras. At urna condimentum mattis pellentesque id
-              nibh. Morbi tristique senectus et netus et malesuada fames ac. Id
-              faucibus nisl tincidunt eget nullam non nisi est sit. Sagittis
-              purus sit amet volutpat consequat mauris nunc congue. Eu sem
-              integer vitae justo.
-            </p>
-          </div>
+      <div id={gameDetails.id} className="col">
+        <p className="h1">{gameDetails.name}</p>
+        <div>
+          <img
+            style={{
+              objectFit: 'contain',
+              height: '500px',
+              width: '500px',
+            }}
+            className="image"
+            fluid="true"
+            src={gameDetails.background_image}
+          />
+        </div>
+        <div>
+          Platforms:
+          {gameDetails.parent_platforms.map((platform) => (
+            <div key={platform.platform.id} style={{ fontWeight: 'bold' }}>
+              {platform.platform.name}
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: '1rem' }}>
+          Genres:{' '}
+          {gameDetails.genres.map((genre) => (
+            <div key={genre.id} style={{ fontWeight: 'bold' }}>
+              {genre.name}
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: '1rem' }}>
+          Ratings:
+          <p style={{ marginBottom: '0rem' }}>
+            ESRB: {gameDetails.esrb_rating.name}
+          </p>
+          <p>Metacritic Score: {gameDetails.metacritic}</p>
+          <p>RAWG: {gameDetails.rating}</p>
+        </div>
+        <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+          <Button onClick={addToWishlist} variant="success">
+            Add to Wishlist
+          </Button>
+          <Button variant="primary">Write a Review</Button>
+        </div>
+        <div className="col">
+          <p className="h4">About</p>
+          <p className="text-secondary">{gameDetails.description_raw}</p>
         </div>
       </div>
     </div>
