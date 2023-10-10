@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function GameDetails() {
   const { gameId } = useParams();
-  const [gameDetails, setGameDetails] = useState([]);
-  // const [wishlist, setWishlist] = useState([]);
+  const [gameDetails, setGameDetails] = useState();
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // API call to get gameDetails of specific game
   useEffect(() => {
@@ -50,22 +49,18 @@ export default function GameDetails() {
 
   if (!gameDetails) return null;
 
-  // function handleWishlistClick() {
-  //   navigate('/wishlist');
-  //   console.log('currentTarget info:', event.currentTarget);
-  // }
-
-  async function addToWishlist(game) {
+  async function addToWishlist() {
     try {
-      const response = await fetch('/api/tables/public.Wishlist', {
+      const response = await fetch('/api/Wishlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(game),
+        body: JSON.stringify(gameDetails),
       });
       if (!response.ok)
         throw new Error(`Network response was NOT okay: ${response.status}`);
       const wishlistGame = await response.json();
-      console.log('gameDetails:', wishlistGame);
+      navigate('/wishlist');
+      console.log(wishlistGame);
     } catch (error) {
       console.error(error.message);
       setError(error);

@@ -1,5 +1,5 @@
 import Carousel from '../components/LandingPageCarousel/Carousel';
-const images = [];
+const images = ['../images/cyberpunk-cover-art.jpeg'];
 
 export default function Landing() {
   return (

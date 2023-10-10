@@ -7,6 +7,7 @@ export default function Search() {
   return (
     <Form className="d-flex">
       <Form.Control
+        name="search"
         type="search"
         placeholder="Search"
         className="me-2"

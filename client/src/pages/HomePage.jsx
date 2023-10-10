@@ -10,6 +10,12 @@ export default function Home() {
   const [error, setError] = useState();
   const navigate = useNavigate();
 
+  // handleDetailsClick for gameDetails to grab 'data-gamekey' id
+  function handleDetailsClick(gameId) {
+    navigate(`/game-details/${gameId}`);
+    console.log(`Game with id ${gameId} was clicked.`);
+  }
+
   // useEffect to fetch game data from API
   useEffect(() => {
     async function fetchGameData() {
@@ -46,12 +52,6 @@ export default function Home() {
   if (error) {
     console.error('Fetch error:', error);
     return <div>Error! {error.message}</div>;
-  }
-
-  // handleDetailsClick for gameDetails to grab 'data-gamekey' id
-  function handleDetailsClick(gameId) {
-    navigate(`/game-details/${gameId}`);
-    console.log(`Game with id ${gameId} was clicked.`);
   }
 
   return (
