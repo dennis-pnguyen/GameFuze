@@ -4,6 +4,10 @@ import Form from 'react-bootstrap/Form';
 
 export default function RegistrationForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -24,6 +28,10 @@ export default function RegistrationForm() {
       alert(`Error registering user: ${err}`);
     } finally {
       setIsLoading(false);
+      setFullName('');
+      setEmail('');
+      setUsername('');
+      setPassword('');
     }
   }
 
@@ -32,6 +40,8 @@ export default function RegistrationForm() {
       <Form.Group className="mb-3">
         <Form.Label>Full Name</Form.Label>
         <Form.Control
+          onChange={(e) => setFullName(e.target.value)}
+          value={fullName}
           name="fullName"
           required={true}
           type="text"
@@ -42,6 +52,8 @@ export default function RegistrationForm() {
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
           name="email"
           required={true}
           type="email"
@@ -55,6 +67,8 @@ export default function RegistrationForm() {
       <Form.Group className="mb-3">
         <Form.Label>Username</Form.Label>
         <Form.Control
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
           name="username"
           required={true}
           type="name"
@@ -65,17 +79,12 @@ export default function RegistrationForm() {
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
           name="password"
           required={true}
           type="password"
           placeholder="Password"
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check
-          required={true}
-          type="checkbox"
-          label="Agree to terms & conditions"
         />
       </Form.Group>
       <div>

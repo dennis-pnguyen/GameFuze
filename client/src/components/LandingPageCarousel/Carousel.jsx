@@ -12,7 +12,7 @@ export default function Carousel({ images }) {
   }, [currentIndex, images]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(handleNext, 3000);
+    const timeoutId = setTimeout(handleNext, 4000);
     return () => clearTimeout(timeoutId);
   }, [handleNext]);
 

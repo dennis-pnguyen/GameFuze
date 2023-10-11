@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import RegistrationForm from './components/RegistrationForm';
+import SignIn from './components/SignInForm';
 import Home from './pages/HomePage';
 import Landing from './pages/LandingPage';
 import Footer from './components/Footer';
@@ -59,7 +60,7 @@ export default function App() {
             element={<RegistrationForm action="sign-up" />}
           />
           <Route path="/game-details/:gameId" element={<GameDetails />} />
-          <Route path="/login" />
+          <Route path="/login" element={<SignIn />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="*" element={<NotFound />} />

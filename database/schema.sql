@@ -54,6 +54,9 @@ CREATE TABLE "public"."Platforms" (
 
 CREATE TABLE "public"."Wishlist" (
 	"gameId" integer NOT NULL,
+  "gameName" TEXT NOT NULL,
+  "released" DATE NOT NULL,
+  "backgroundImage" TEXT NOT NULL,
 	"userId" integer NOT NULL,
 	CONSTRAINT "Wishlist_pk" PRIMARY KEY ("gameId","userId")
 ) WITH (
@@ -79,7 +82,6 @@ ALTER TABLE "Games" ADD CONSTRAINT "Games_fk1" FOREIGN KEY ("platformId") REFERE
 
 
 
-ALTER TABLE "Wishlist" ADD CONSTRAINT "Wishlist_fk0" FOREIGN KEY ("gameId") REFERENCES "Games"("gameId");
 ALTER TABLE "Wishlist" ADD CONSTRAINT "Wishlist_fk1" FOREIGN KEY ("userId") REFERENCES "Users"("userId");
 
 ALTER TABLE "Reviews" ADD CONSTRAINT "Reviews_fk0" FOREIGN KEY ("userId") REFERENCES "Users"("userId");

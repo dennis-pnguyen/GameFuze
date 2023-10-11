@@ -66,11 +66,11 @@ app.post('/api/sign-up', async (req, res, next) => {
 });
 
 // Endpoint to authorize user login
-app.post('/api/sign-in', async (req, res, next) => {
+app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) throw new ClientError(401, 'Invalid login');
-    const sql = `SELECT "userId", "hashedPassword"
+    const sql = `SELECT "username", "userId", "hashedPassword"
       from "Users"
       where "username" = $1`;
     const params = [username];
@@ -80,7 +80,7 @@ app.post('/api/sign-in', async (req, res, next) => {
     const { userId, hashedPassword } = user;
     if (!(await argon2.verify(hashedPassword, password)))
       throw new ClientError(401, 'Invalid login');
-    const payload = { userId, username };
+    const payload = { userId: user.userId, username: user.username };
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
     res.json({ token, user: payload });
   } catch (err) {
@@ -122,13 +122,13 @@ app.get('/api/tables/public.Reviews', async (req, res, next) => {
 });
 
 // Endpoint to retrieve a user's wishlist
-app.get('/api/tables/public.Wishlist', async (req, res, next) => {
+app.get('/api/Wishlist', async (req, res, next) => {
   try {
-    if (!req.user) throw new ClientError(401, 'not logged in');
+    // if (!req.user) throw new ClientError(401, 'not logged in');
     const sql = ` select * from "Wishlist"
-      where "userId" = $1
+      where "userId" = 1
       order by "gameId" desc`;
-    const result = await db.query(sql, [req.user.userId]);
+    const result = await db.query(sql);
     res.status(201).json(result.rows);
   } catch (err) {
     next(err);
@@ -136,19 +136,38 @@ app.get('/api/tables/public.Wishlist', async (req, res, next) => {
 });
 
 // Endpoint for adding to wishlist
-app.post('/api/tables/public.Wishlist', async (req, res, next) => {
+app.post('/api/Wishlist', async (req, res, next) => {
   try {
-    const { gameId, gameName } = req.body;
-    if (!gameId || !gameName)
+    const { id, name, released, background_image: backgroundImage } = req.body;
+    if (!id || !name || !released || !backgroundImage)
       throw new ClientError(400, 'Please select another game.');
     const sql = `
-    insert into "Wishlist" ("gameId", "gameName")
-    values ($1, $2)
+    insert into "Wishlist" ("userId", "gameId", "gameName", "released", "backgroundImage")
+    values (1, $1, $2, $3, $4)
     returning *`;
-    const params = [gameId, gameName];
+    const params = [id, name, released, backgroundImage];
     const result = await db.query(sql, params);
     const [game] = result.rows;
     res.status(201).json(game);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Endpoint for deleting from wishlist
+app.delete('/api/Wishlist', async (req, res, next) => {
+  try {
+    // const userId = Number(req.params.userId);
+    // if (!Number.isInteger(userId))
+    //   throw new ClientError(400, 'userId must be an integer');
+    const sql = `DELETE from "Wishlist"
+      where "userId" = 1
+      returning *`;
+
+    const result = await db.query(sql);
+    const [deleted] = result.rows;
+    if (!deleted) throw new ClientError(404, 'Item not found');
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
