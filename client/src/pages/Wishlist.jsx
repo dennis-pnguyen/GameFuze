@@ -1,4 +1,5 @@
 import Card from 'react-bootstrap/Card';
+import { FaTrashCan } from 'react-icons/fa6';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,11 +8,6 @@ export default function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
   const [isLoading, setIsLoading] = useState();
   const navigate = useNavigate();
-
-  function handleDetailsClick(gameId) {
-    navigate(`/game-details/${gameId}`);
-    console.log(`Game with id ${gameId} was clicked.`, event.target.value);
-  }
 
   useEffect(() => {
     async function fetchWishlist() {
@@ -34,6 +30,30 @@ export default function Wishlist() {
     }
     fetchWishlist();
   }, []);
+
+  async function removeEntry() {
+    const req = { method: 'DELETE' };
+    const res = await fetch('/api/Wishlist', req);
+    if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  }
+
+  async function handleDelete() {
+    try {
+      setIsLoading(true);
+      await removeEntry();
+    } catch (err) {
+      alert(`Error deleting entry: ${err}`);
+    } finally {
+      setIsLoading(false);
+      alert('Game removed from wishlist!');
+      navigate('/home');
+    }
+  }
+
+  function handleDetailsClick(gameId) {
+    navigate(`/game-details/${gameId}`);
+    console.log(`Game with id ${gameId} was clicked.`, event.target.value);
+  }
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error! {error.message}</div>;
@@ -69,6 +89,7 @@ export default function Wishlist() {
                   Details
                 </Card.Link>
               </Card.Body>
+              <FaTrashCan onClick={handleDelete} />
             </Card>
           ))}
         </div>

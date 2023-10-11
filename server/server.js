@@ -154,6 +154,25 @@ app.post('/api/Wishlist', async (req, res, next) => {
   }
 });
 
+// Endpoint for deleting from wishlist
+app.delete('/api/Wishlist', async (req, res, next) => {
+  try {
+    // const userId = Number(req.params.userId);
+    // if (!Number.isInteger(userId))
+    //   throw new ClientError(400, 'userId must be an integer');
+    const sql = `DELETE from "Wishlist"
+      where "userId" = 1
+      returning *`;
+
+    const result = await db.query(sql);
+    const [deleted] = result.rows;
+    if (!deleted) throw new ClientError(404, 'Item not found');
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
+
 /**
  * Serves React's index.html if no api route matches.
  *
