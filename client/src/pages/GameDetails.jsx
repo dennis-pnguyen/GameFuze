@@ -25,7 +25,6 @@ export default function GameDetails() {
         if (!res.ok) throw new Error(`fetch Error ${res.status}`);
         const details = await res.json();
         setGameDetails(details);
-        console.log(details);
       } catch (err) {
         setError(error);
       } finally {
