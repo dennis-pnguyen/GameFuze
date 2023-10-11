@@ -20,5 +20,9 @@ export default function Indicators({ count, current, onSelect }) {
     );
   }
 
-  return <div className="progress-dots">{buttons}</div>;
+  return (
+    <div style={{ display: 'none' }} className="progress-dots">
+      {buttons}
+    </div>
+  );
 }

@@ -66,7 +66,7 @@ app.post('/api/sign-up', async (req, res, next) => {
 });
 
 // Endpoint to authorize user login
-app.post('/api/sign-in', async (req, res, next) => {
+app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) throw new ClientError(401, 'Invalid login');
