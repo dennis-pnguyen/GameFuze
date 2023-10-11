@@ -60,7 +60,7 @@ export default function GameDetails() {
         throw new Error(`Network response was NOT okay: ${response.status}`);
       const wishlistGame = await response.json();
       navigate('/wishlist');
-      console.log(wishlistGame);
+      return wishlistGame;
     } catch (error) {
       console.error(error.message);
       setError(error);

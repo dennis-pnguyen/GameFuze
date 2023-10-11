@@ -70,7 +70,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) throw new ClientError(401, 'Invalid login');
-    const sql = `SELECT "userId", "hashedPassword"
+    const sql = `SELECT "username", "userId", "hashedPassword"
       from "Users"
       where "username" = $1`;
     const params = [username];
@@ -80,7 +80,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     const { userId, hashedPassword } = user;
     if (!(await argon2.verify(hashedPassword, password)))
       throw new ClientError(401, 'Invalid login');
-    const payload = { userId, username };
+    const payload = { userId: user.userId, username: user.username };
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
     res.json({ token, user: payload });
   } catch (err) {

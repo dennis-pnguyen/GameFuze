@@ -9,6 +9,8 @@ export default function Wishlist() {
   const [isLoading, setIsLoading] = useState();
   const navigate = useNavigate();
 
+  // Fetch wishlist
+
   useEffect(() => {
     async function fetchWishlist() {
       try {
@@ -31,12 +33,14 @@ export default function Wishlist() {
     fetchWishlist();
   }, []);
 
+  // Backend call to remove entry from wishlist
   async function removeEntry() {
     const req = { method: 'DELETE' };
     const res = await fetch('/api/Wishlist', req);
     if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   }
 
+  // Delete handler for wishlist
   async function handleDelete() {
     try {
       setIsLoading(true);
@@ -52,7 +56,6 @@ export default function Wishlist() {
 
   function handleDetailsClick(gameId) {
     navigate(`/game-details/${gameId}`);
-    console.log(`Game with id ${gameId} was clicked.`, event.target.value);
   }
 
   if (isLoading) return <div>Loading...</div>;
@@ -89,7 +92,10 @@ export default function Wishlist() {
                   Details
                 </Card.Link>
               </Card.Body>
-              <FaTrashCan onClick={handleDelete} />
+              <FaTrashCan
+                style={{ cursor: 'pointer' }}
+                onClick={handleDelete}
+              />
             </Card>
           ))}
         </div>

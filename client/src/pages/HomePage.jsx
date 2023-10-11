@@ -13,7 +13,6 @@ export default function Home() {
   // handleDetailsClick for gameDetails to grab 'data-gamekey' id
   function handleDetailsClick(gameId) {
     navigate(`/game-details/${gameId}`);
-    console.log(`Game with id ${gameId} was clicked.`);
   }
 
   // useEffect to fetch game data from API
@@ -35,7 +34,6 @@ export default function Home() {
           );
         const gameData = await response.json();
         setGames(gameData.results);
-        console.log(gameData.results);
       } catch (error) {
         console.error(error.message);
         setError(error);

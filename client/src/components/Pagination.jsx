@@ -46,8 +46,10 @@ export default function Pagination() {
           <li>{item.pages}</li>
         ))}
       </ul> */}
-      <button>Previous</button>
-      <button>Next</button>
+      <div className="mt-3">
+        <button>Previous</button>
+        <button>Next</button>
+      </div>
     </>
   );
 }
