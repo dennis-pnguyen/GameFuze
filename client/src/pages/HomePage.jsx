@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from 'react-router-dom';
-import Pagination from '../components/Pagination';
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export default function Home() {
@@ -86,7 +85,6 @@ export default function Home() {
             </Card>
           ))}
         </div>
-        <Pagination />
       </div>
     </>
   );

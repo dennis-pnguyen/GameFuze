@@ -1,4 +1,5 @@
 import Carousel from '../components/LandingPageCarousel/Carousel';
+import Button from 'react-bootstrap/Button';
 const images = [
   '/images/black-and-white-control.avif',
   '/images/computer-room.avif',
@@ -11,6 +12,11 @@ export default function Landing() {
   return (
     <>
       <Carousel images={images} />
+      <div>
+        <Button href="/home" variant="secondary">
+          Enter
+        </Button>
+      </div>
     </>
   );
 }

@@ -52,7 +52,7 @@ export default function App() {
     <AppContext.Provider value={contextValue}>
       <NavBar />
       <Routes>
-        <Route path="/">
+        <Route path="/" element={<NavBar />}>
           <Route path="/home" element={<Home />} />
           <Route path="/landing" element={<Landing />} />
           <Route
