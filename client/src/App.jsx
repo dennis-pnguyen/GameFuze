@@ -50,7 +50,6 @@ export default function App() {
 
   return (
     <AppContext.Provider value={contextValue}>
-      <NavBar />
       <Routes>
         <Route path="/" element={<NavBar />}>
           <Route path="/home" element={<Home />} />

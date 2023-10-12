@@ -19,6 +19,7 @@ export default function SignIn() {
       const res = await fetch('/api/auth/sign-in', req);
       if (!res.ok) throw new Error(`fetch Error ${res.status}`);
       const { user, token } = await res.json();
+      sessionStorage.setItem('token', token);
       console.log('Signed In', user, '; received token:', token);
     } catch (err) {
       alert(`Error signing in: ${err}`);

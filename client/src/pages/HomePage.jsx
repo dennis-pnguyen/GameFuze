@@ -65,7 +65,7 @@ export default function Home() {
             <Card
               className="shadow-sm"
               key={game.id}
-              style={{ width: '18rem' }}>
+              style={{ width: '18rem', marginBottom: '1rem' }}>
               <Card.Img
                 src={game.background_image}
                 variant="top"
