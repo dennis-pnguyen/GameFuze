@@ -4,7 +4,9 @@ import express from 'express';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import pg from 'pg';
-import { ClientError, errorMiddleware } from './lib/index.js';
+import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
+const hashKey = process.env.TOKEN_SECRET;
+if (!hashKey) throw new Error('TOKEN_SECRET not found');
 
 const connectionString =
   process.env.DATABASE_URL ||
@@ -66,11 +68,11 @@ app.post('/api/sign-up', async (req, res, next) => {
 });
 
 // Endpoint to authorize user login
-app.post('/api/auth/sign-in', async (req, res, next) => {
+app.post('/api/auth/sign-in', authMiddleware, async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) throw new ClientError(401, 'Invalid login');
-    const sql = `SELECT "username", "userId", "hashedPassword"
+    const sql = `select "userId", "hashedPassword"
       from "Users"
       where "username" = $1`;
     const params = [username];
@@ -78,10 +80,10 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     const [user] = result.rows;
     if (!user) throw new ClientError(401, 'Invalid login');
     const { userId, hashedPassword } = user;
-    if (!(await argon2.verify(hashedPassword, password)))
-      throw new ClientError(401, 'Invalid login');
-    const payload = { userId: user.userId, username: user.username };
-    const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+    const isMatching = await argon2.verify(hashedPassword, password);
+    if (!isMatching) throw new ClientError(401, 'Invalid login');
+    const payload = { userId, username };
+    const token = jwt.sign(payload, hashKey);
     res.json({ token, user: payload });
   } catch (err) {
     next(err);
