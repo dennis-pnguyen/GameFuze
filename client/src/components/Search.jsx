@@ -38,7 +38,6 @@ export default function Search() {
     setSearchTerm('');
   }
 
-  console.log(gameResults);
   if (gameResults !== null) {
     return (
       <>
