@@ -13,8 +13,8 @@ export default function Landing() {
     <>
       <Carousel images={images} />
       <div>
-        <Button href="/home" variant="secondary">
-          Enter
+        <Button href="/login" variant="secondary">
+          Login
         </Button>
       </div>
     </>

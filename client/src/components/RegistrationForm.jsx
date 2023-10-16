@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 export default function RegistrationForm() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,9 +22,10 @@ export default function RegistrationForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       };
-      const res = await fetch('/api/sign-up', req);
+      const res = await fetch('/api/auth/sign-up', req);
       if (!res.ok) throw new Error(`fetch Error ${res.status}`);
       const user = await res.json;
+      if (user) navigate('/sign-in');
       alert(`Registered!`, user);
     } catch (err) {
       alert(`Error registering user: ${err}`);

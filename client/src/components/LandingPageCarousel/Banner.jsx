@@ -4,8 +4,8 @@ export default function CarouselBanner({ image }) {
       <img
         style={{
           objectFit: 'contain',
-          height: '600px',
-          width: '600px',
+          height: '100%',
+          width: '100%',
         }}
         src={image}
         alt={image}

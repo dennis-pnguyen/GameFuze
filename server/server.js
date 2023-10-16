@@ -5,8 +5,6 @@ import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import pg from 'pg';
 import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
-const hashKey = process.env.TOKEN_SECRET;
-if (!hashKey) throw new Error('TOKEN_SECRET not found');
 
 const connectionString =
   process.env.DATABASE_URL ||
@@ -48,7 +46,7 @@ app.get('/api/tables/public.Users', async (req, res, next) => {
 });
 
 // Endpoint to allow user to sign-up
-app.post('/api/sign-up', async (req, res, next) => {
+app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
     const { fullName, email, username, password } = req.body;
     if (!username || !password) {
@@ -68,7 +66,7 @@ app.post('/api/sign-up', async (req, res, next) => {
 });
 
 // Endpoint to authorize user login
-app.post('/api/auth/sign-in', authMiddleware, async (req, res, next) => {
+app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) throw new ClientError(401, 'Invalid login');
@@ -80,10 +78,10 @@ app.post('/api/auth/sign-in', authMiddleware, async (req, res, next) => {
     const [user] = result.rows;
     if (!user) throw new ClientError(401, 'Invalid login');
     const { userId, hashedPassword } = user;
-    const isMatching = await argon2.verify(hashedPassword, password);
-    if (!isMatching) throw new ClientError(401, 'Invalid login');
-    const payload = { userId, username };
-    const token = jwt.sign(payload, hashKey);
+    if (!(await argon2.verify(hashedPassword, password)))
+      throw new ClientError(401, 'invalid login');
+    const payload = { userId, password };
+    const token = jwt.sign(payload, process.env.TOKEN_SECRET);
     res.json({ token, user: payload });
   } catch (err) {
     next(err);

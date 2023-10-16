@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import NavBar from './components/NavBar';
+import Header from './components/Header';
 import RegistrationForm from './components/RegistrationForm';
 import SignIn from './components/SignInForm';
 import Home from './pages/HomePage';
-import Landing from './pages/LandingPage';
 import Footer from './components/Footer';
 import GameDetails from './pages/GameDetails';
 import Reviews from './pages/ReviewsPage';
@@ -51,9 +50,8 @@ export default function App() {
   return (
     <AppContext.Provider value={contextValue}>
       <Routes>
-        <Route path="/" element={<NavBar />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/landing" element={<Landing />} />
+        <Route path="/" element={<Header />}>
+          <Route index path="/home" element={<Home />} />
           <Route
             path="/register"
             element={<RegistrationForm action="sign-up" />}
