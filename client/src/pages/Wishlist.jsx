@@ -64,7 +64,7 @@ export default function Wishlist() {
   return (
     <>
       <div>
-        <h2 style={{ margin: '3rem' }}>Wishlist</h2>
+        <h1 style={{ margin: '3rem' }}>Wishlist</h1>
       </div>
       <div className="container">
         <div

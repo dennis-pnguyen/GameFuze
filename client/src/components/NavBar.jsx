@@ -1,5 +1,4 @@
 // import { useContext } from 'react';
-import { Outlet } from 'react-router-dom';
 import Search from './Search';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -15,7 +14,7 @@ export default function NavBar() {
         className="bg-body-tertiary"
         data-bs-theme="light">
         <Container>
-          <Navbar.Brand href="/landing">GameFuze</Navbar.Brand>
+          <Navbar.Brand href="/">GameFuze</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -33,7 +32,6 @@ export default function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Outlet />
     </>
   );
 }
