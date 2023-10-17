@@ -14,7 +14,7 @@ export default function Landing() {
       <Carousel images={images} />
       <div>
         <Button href="/login" variant="secondary">
-          Login
+          Login to Continue
         </Button>
       </div>
     </>
