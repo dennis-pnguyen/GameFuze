@@ -41,7 +41,7 @@ export default function SignIn() {
       const res = await fetch('/api/auth/sign-in', req);
       if (!res.ok) throw new Error(`fetch Error ${res.status}`);
       const { user, token } = await res.json();
-      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token);
       if (token) navigate('/home');
       console.log('Logged in', user, '; received token:', token);
       alert('Logged in as GUEST');
