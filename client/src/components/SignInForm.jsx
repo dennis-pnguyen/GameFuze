@@ -63,7 +63,7 @@ export default function SignIn() {
         <div>
           Not registered? <a href="/register">Register for an account</a>
         </div>
-        or
+        <div>or</div>
         <div>
           <a href="#" onClick={guestLogin}>
             Continue as GUEST{' '}
